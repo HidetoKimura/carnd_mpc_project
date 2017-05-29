@@ -56,6 +56,12 @@ double dt = 0.05;
 
 ## Polynomial Fitting and MPC Preprocessing
 
+1. Set N and dt.
+2. Fit the polynomial to the waypoints.
+3. Calculate initial cross track error and orientation error values.
+4. Define the components of the cost function (state, actuators, etc). 
+5. Define the model constraints. These are the state update equations defined in the Vehicle Models module
+
 ~~~
 void conv_vehicle_coordinate(vector<double> &ptsx, vector<double> &ptsy, double px, double py, double psi, 
 Eigen::VectorXd &wx, Eigen::VectorXd &wy) {
@@ -80,11 +86,6 @@ Eigen::VectorXd &wx, Eigen::VectorXd &wy) {
           Output out = mpc.Solve(state, coeffs);
 ~~~
 
-+ Set N and dt.
-+ Fit the polynomial to the waypoints.
-+ Calculate initial cross track error and orientation error values.
-+ Define the components of the cost function (state, actuators, etc). 
-+ Define the model constraints. These are the state update equations defined in the Vehicle Models module
 
 ~~~
 // Weights
