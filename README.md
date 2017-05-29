@@ -41,6 +41,7 @@ ws->send()
 ~~~
 Kinematic models are simplifications of dynamic models that ignore tire forces, gravity, and mass.
 ~~~
+![vehicle_coord](https://github.com/HidetoKimura/carnd_mpc_project/blob/master/vehicle_coord.png)
 
 ~~~
       // x_[t+1] = x[t] + v[t] * cos(psi[t]) * dt
