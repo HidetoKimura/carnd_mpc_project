@@ -50,7 +50,8 @@ ws->send()
 ## Timestep Length and Elapsed Duration (N & dt)
 
 ~~~
-
+size_t N = 12;
+double dt = 0.05;
 ~~~
 
 ## Polynomial Fitting and MPC Preprocessing
