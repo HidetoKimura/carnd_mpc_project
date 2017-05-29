@@ -47,7 +47,43 @@ ws->send()
       // epsi[t+1] = psi[t] - psides[t] + v[t] * delta[t] / Lf * dt
 ~~~
 
+### state
+x, y - Position
+psi - Orientation
+v - Speed
+
+### actuators
+delta - Steering angle
+a - Acceleration (throttle/brake combined)
+
+### error
+cte - Cross Track Error
+epsi - Orientation Error
+
+### environment value
+Lf - Distance between the front of the vehicle and its center of gravity
+
+
+
 ## Timestep Length and Elapsed Duration (N & dt)
+
+~~~
+T is the product of two other variables, N and dt.
+
+N is the number of timesteps in the horizon. dt is how much time elapses between actuations. For example, if N were 20 and dt were 0.5, then T would be 10 seconds.
+Horizon
+In the case of driving a car, T should be a few seconds, at most. Beyond that horizon, the environment will change enough that it won't make sense to predict any further into the future.
+
+Number of Timesteps
+The goal of Model Predictive Control is to optimize the control inputs: [δ,a]. An optimizer will tune these inputs until a low cost vector of control inputs is found. The length of this vector is determined by N:
+
+Thus N determines the number of variables the optimized by MPC. This is also the major driver of computational cost.
+
+Timestep Duration
+MPC attempts to approximate a continues reference trajectory by means of discrete paths between actuations. Larger values of dt result in less frequent actuations, which makes it harder to accurately approximate a continuous reference trajectory. This is sometimes called "discretization error".
+
+A good approach to setting N, dt, and T is to first determine a reasonable range for T and then tune dt and N appropriately, keeping the effect of each in mind.
+~~~
 
 ~~~
 size_t N = 12;
