@@ -15,25 +15,19 @@ Please click on the images if you want to see the video:
 In order to avoid build failure, I changed "main.cpp".
 
 ~~~~
-/Users/hideto.kimura/carnd/carnd_term2/carnd_pid_control_project/src/main.cpp:39:5: error: 
-      no matching member function for call to 'onMessage'
-  h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t ...
+/Users/hideto.kimura/carnd/carnd_term2/carnd_term2_notebook/CarND-MPC-Project/src/main.cpp:84:5: error: no matching member function for call to 'onMessage'
+  h.onMessage([&mpc](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                                                  ^
-/usr/local/include/uWS/Group.h:69:10: note: candidate function not viable: no
-      known conversion from '(lambda at
-      /Users/hideto.kimura/carnd/carnd_term2/carnd_pid_control_project/src/main.cpp:39:15)'
-      to 'std::function<void (WebSocket<true> *, char *, size_t, OpCode)>' (aka
-      'function<void (WebSocket<true> *, char *, unsigned long, uWS::OpCode)>')
-      for 1st argument
-    void onMessage(std::function<void(WebSocket<isServer> *, char *, siz...
+/usr/local/include/uWS/Group.h:69:10: note: candidate function not viable: no known conversion from '(lambda at
+      /Users/hideto.kimura/carnd/carnd_term2/carnd_term2_notebook/CarND-MPC-Project/src/main.cpp:84:15)' to 'std::function<void (WebSocket<true> *, char *, size_t, OpCode)>'
+      (aka 'function<void (WebSocket<true> *, char *, unsigned long, uWS::OpCode)>') for 1st argument
+    void onMessage(std::function<void(WebSocket<isServer> *, char *, size_t, OpCode)> handler);
                                                           ^
-/usr/local/include/uWS/Group.h:69:10: note: candidate function not viable: no
-      known conversion from '(lambda at
-      /Users/hideto.kimura/carnd/carnd_term2/carnd_pid_control_project/src/main.cpp:39:15)'
-      to 'std::function<void (WebSocket<false> *, char *, size_t, OpCode)>' (aka
-      'function<void (WebSocket<false> *, char *, unsigned long, uWS::OpCode)>')
-      for 1st argument
+/usr/local/include/uWS/Group.h:69:10: note: candidate function not viable: no known conversion from '(lambda at
+      /Users/hideto.kimura/carnd/carnd_term2/carnd_term2_notebook/CarND-MPC-Project/src/main.cpp:84:15)' to 'std::function<void (WebSocket<false> *, char *, size_t, OpCode)>'
+      (aka 'function<void (WebSocket<false> *, char *, unsigned long, uWS::OpCode)>') for 1st argument
 ~~~~
+
 ~~~~
 h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
 ws.send()
@@ -42,9 +36,10 @@ h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> *ws, char *data, size_t length, u
 ws->send()
 ~~~~
 
-## Approach
-
-
+## The Model
+## Timestep Length and Elapsed Duration (N & dt)
+## Polynomial Fitting and MPC Preprocessing
+## Model Predictive Control with Latency
 ---
 
 ## Dependencies
