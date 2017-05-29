@@ -39,6 +39,10 @@ ws->send()
 ## The Model
 
 ~~~
+Kinematic models are simplifications of dynamic models that ignore tire forces, gravity, and mass.
+~~~
+
+~~~
       // x_[t+1] = x[t] + v[t] * cos(psi[t]) * dt
       // y_[t+1] = y[t] + v[t] * sin(psi[t]) * dt
       // psi_[t+1] = psi[t] + v[t] / Lf * delta[t] * dt
