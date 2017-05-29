@@ -79,6 +79,13 @@ Eigen::VectorXd &wx, Eigen::VectorXd &wy) {
           state << 0, 0, 0, v, cte, epsi;
           Output out = mpc.Solve(state, coeffs);
 ~~~
+
++ Set N and dt.
++ Fit the polynomial to the waypoints.
++ Calculate initial cross track error and orientation error values.
++ Define the components of the cost function (state, actuators, etc). 
++ Define the model constraints. These are the state update equations defined in the Vehicle Models module
+
 ~~~
 // Weights
 const double w_cte = 1.0;
@@ -101,12 +108,22 @@ const double w_a_diff = 1.0;
       fg[0] += w_delta * CppAD::pow(vars[delta_start + i], 2);
       fg[0] += w_a * CppAD::pow(vars[a_start + i], 2);
     }
-
     // Minimize the value gap between sequential actuations.
     for (int i = 0; i < N - 2; i++) {
       fg[0] += w_delta_diff * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
       fg[0] += w_a_diff * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
     }
+    :
+    :
+
+    fg[2 + x_start + i] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
+    fg[2 + y_start + i] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
+    fg[2 + psi_start + i] = psi1 - (psi0 + v0 * delta0 / Lf * dt);
+    fg[2 + v_start + i] = v1 - (v0 + a0 * dt);
+    fg[2 + cte_start + i] =
+        cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * dt));
+    fg[2 + epsi_start + i] =                  
+          epsi1 - ((psi0 - psides0) + v0 * delta0 / Lf * dt);
 ~~~
 
 
