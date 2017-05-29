@@ -48,20 +48,20 @@ ws->send()
 ~~~
 
 ### state
-x, y - Position
-psi - Orientation
-v - Speed
+x, y - Position  
+psi - Orientation  
+v - Speed  
 
 ### actuators
-delta - Steering angle
-a - Acceleration (throttle/brake combined)
+delta - Steering angle  
+a - Acceleration (throttle/brake combined)  
 
 ### error
-cte - Cross Track Error
-epsi - Orientation Error
+cte - Cross Track Error  
+epsi - Orientation Error  
 
 ### environment value
-Lf - Distance between the front of the vehicle and its center of gravity
+Lf - Distance between the front of the vehicle and its center of gravity  
 
 
 
