@@ -37,9 +37,86 @@ ws->send()
 ~~~~
 
 ## The Model
+
+~~~
+      // x_[t+1] = x[t] + v[t] * cos(psi[t]) * dt
+      // y_[t+1] = y[t] + v[t] * sin(psi[t]) * dt
+      // psi_[t+1] = psi[t] + v[t] / Lf * delta[t] * dt
+      // v_[t+1] = v[t] + a[t] * dt
+      // cte[t+1] = f(x[t]) - y[t] + v[t] * sin(epsi[t]) * dt
+      // epsi[t+1] = psi[t] - psides[t] + v[t] * delta[t] / Lf * dt
+~~~
+
 ## Timestep Length and Elapsed Duration (N & dt)
+
+~~~
+
+~~~
+
 ## Polynomial Fitting and MPC Preprocessing
+
+~~~
+void conv_vehicle_coordinate(vector<double> &ptsx, vector<double> &ptsy, double px, double py, double psi, 
+Eigen::VectorXd &wx, Eigen::VectorXd &wy) {
+
+  for (int i=0; i < wx.size() ; ++i){
+    wx(i) =  cos(psi) * (ptsx[i] - px) + sin(psi) * (ptsy[i] - py);
+    wy(i) = -sin(psi) * (ptsx[i] - px) + cos(psi) * (ptsy[i] - py);  
+  } 
+  return ;
+}  
+~~~
+~~~
+          conv_vehicle_coordinate(ptsx, ptsy, px, py, psi ,wx, wy);
+
+          auto coeffs = polyfit(wx, wy, 3);
+
+          double cte = polyeval(coeffs, 0);
+          double epsi = -atan(coeffs[1]);
+          
+          Eigen::VectorXd state(6);
+          state << 0, 0, 0, v, cte, epsi;
+          Output out = mpc.Solve(state, coeffs);
+~~~
+~~~
+// Weights
+const double w_cte = 1.0;
+const double w_epsi = 1.0;
+const double w_v = 1.0;
+const double w_delta = 1.0;
+const double w_a = 10.0;
+const double w_delta_diff = 500.0;
+const double w_a_diff = 1.0;
+
+    // The part of the cost based on the reference state.
+    for (int i = 0; i < N; i++) {
+      fg[0] += w_cte * CppAD::pow(vars[cte_start + i] - ref_cte, 2);
+      fg[0] += w_epsi * CppAD::pow(vars[epsi_start + i] - ref_epsi, 2);
+      fg[0] += w_v * CppAD::pow(vars[v_start + i] - ref_v, 2);
+    }
+
+    // Minimize the use of actuators.
+    for (int i = 0; i < N - 1; i++) {
+      fg[0] += w_delta * CppAD::pow(vars[delta_start + i], 2);
+      fg[0] += w_a * CppAD::pow(vars[a_start + i], 2);
+    }
+
+    // Minimize the value gap between sequential actuations.
+    for (int i = 0; i < N - 2; i++) {
+      fg[0] += w_delta_diff * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+      fg[0] += w_a_diff * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+    }
+~~~
+
+
 ## Model Predictive Control with Latency
+~~~
+          const int latency_index = 2;
+
+          double steer_value = out.delta.at(latency_index);
+          double throttle_value= out.a.at(latency_index);
+~~~
+
 ---
 
 ## Dependencies
