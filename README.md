@@ -125,7 +125,7 @@ Eigen::VectorXd &wx, Eigen::VectorXd &wy) {
 }  
 ~~~
 
-Next, We proceed with the next step.　　
+Next, we proceed with the following step.　　
 
 1. Fit the polynomial to the waypoints. Get `coeffs`.
 2. Calculate cross track error and orientation error values.
@@ -144,7 +144,7 @@ Next, We proceed with the next step.　　
           Output out = mpc.Solve(state, coeffs);
 ~~~
 
-In `MPC Class`, I defineed the components of the cost function (state, actuators, etc) and the model constraints.   
+In `MPC Class`, I defined the components of the cost function (state, actuators, etc) and the model constraints.   
 I also added weights for the tuning. 
 
 ~~~
