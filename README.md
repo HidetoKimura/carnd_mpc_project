@@ -193,7 +193,7 @@ const double w_a_diff = 1.0;
 ## Model Predictive Control with Latency
 
 As described above, 'N' is 12 step and 'dt' is 50ms.  
-So We need to use index:2 value for the 100ms latency.  
+So I used index:2 value for the 100ms latency.  
 
 ~~~
           const int latency_index = 2;
