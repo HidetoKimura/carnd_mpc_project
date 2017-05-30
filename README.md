@@ -83,27 +83,29 @@ since y is the up-down direction.
 
 ## Timestep Length and Elapsed Duration (N & dt)
 
+The time `T` defines the prediction horizon. `T` is the product of two other variables, `N` and `dt`.   
+
+`N` is the number of timesteps in the horizon. `dt` is how much time elapses between actuations.   
+For example, if N were 20 and dt were 0.5, then T would be 10 seconds.  
+
+In the case of driving a car, `T` should be a few seconds, at most. Beyond that horizon,   
+the environment will change enough that it won't make sense to predict any further into the future.  
+
+The goal of Model Predictive Control is to optimize the control inputs: `[delta, a]`.  
+An optimizer will tune these inputs until a low cost vector of control inputs is found.   
+The length of this vector is determined by `N`:  
+  
+Thus `N` determines the number of variables the optimized by MPC. This is also the major driver of computational cost.
+
+The latency in this project and the control interval is 100ms. So `dt` is sufficient for 50 ms.
+I tried to change `N` value form 5 to 50. The prediction became unstable when increasing N and it need more time.
+
+Finally I used the following values.
+
 ~~~
-T is the product of two other variables, N and dt.
-
-N is the number of timesteps in the horizon. dt is how much time elapses between actuations. For example, if N were 20 and dt were 0.5, then T would be 10 seconds.
-Horizon
-In the case of driving a car, T should be a few seconds, at most. Beyond that horizon, the environment will change enough that it won't make sense to predict any further into the future.
-
-Number of Timesteps
-The goal of Model Predictive Control is to optimize the control inputs: [δ,a]. An optimizer will tune these inputs until a low cost vector of control inputs is found. The length of this vector is determined by N:
-
-Thus N determines the number of variables the optimized by MPC. This is also the major driver of computational cost.
-
-Timestep Duration
-MPC attempts to approximate a continues reference trajectory by means of discrete paths between actuations. Larger values of dt result in less frequent actuations, which makes it harder to accurately approximate a continuous reference trajectory. This is sometimes called "discretization error".
-
-A good approach to setting N, dt, and T is to first determine a reasonable range for T and then tune dt and N appropriately, keeping the effect of each in mind.
-~~~
-
-~~~
-size_t N = 12;
-double dt = 0.05;
+T = 0.6; // sec
+size_t N = 12; // steps
+double dt = 0.05; // sec
 ~~~
 
 ## Polynomial Fitting and MPC Preprocessing
