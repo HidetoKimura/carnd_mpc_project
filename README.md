@@ -129,7 +129,7 @@ Next, we proceed with the following step.　　
 
 1. Fit the polynomial to the waypoints. Get `coeffs`.
 2. Calculate cross track error and orientation error values.
-3. Call mpc.Solve and get `out`. `out` has `delta(steering)' and `a(throttle)`.
+3. Call mpc.Solve and get `out`. `out` has `delta(steering)` and `a(throttle)`.
 
 ~~~
           conv_vehicle_coordinate(ptsx, ptsy, px, py, psi ,wx, wy);
