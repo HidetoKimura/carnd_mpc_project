@@ -67,9 +67,9 @@ For this project we used a global kinematic model, which is simplifications of d
 ### environment value
 * `Lf` - Distance between the front of the vehicle and its center of gravity  
 
-And the simulator pass the following parameters.
+And the simulator pass the following information.
 
-### parameters from the simulator
+### information from the simulator
 
 * `ptsx` (Array<float>) - The global x positions of the waypoints.
 * `ptsy` (Array<float>) - The global y positions of the waypoints. This corresponds to the z coordinate in Unity
@@ -110,11 +110,8 @@ double dt = 0.05; // sec
 
 ## Polynomial Fitting and MPC Preprocessing
 
-1. Set N and dt.
-2. Fit the polynomial to the waypoints.
-3. Calculate initial cross track error and orientation error values.
-4. Define the components of the cost function (state, actuators, etc). 
-5. Define the model constraints. These are the state update equations defined in the Vehicle Models module
+As described above, the simulator pass the vehicle state and waypoints with the global coordinates.  
+First we need convert to the vehicle coordinates. 
 
 ~~~
 void conv_vehicle_coordinate(vector<double> &ptsx, vector<double> &ptsy, double px, double py, double psi, 
@@ -127,6 +124,13 @@ Eigen::VectorXd &wx, Eigen::VectorXd &wy) {
   return ;
 }  
 ~~~
+
+Next, We proceed with the next step.　　
+
+1. Fit the polynomial to the waypoints. Get `coeffs`.
+2. Calculate cross track error and orientation error values.
+3. Call mpc.Solve and get `out`. `out` has `delta(steering)' and `a(throttle)`.
+
 ~~~
           conv_vehicle_coordinate(ptsx, ptsy, px, py, psi ,wx, wy);
 
@@ -140,6 +144,8 @@ Eigen::VectorXd &wx, Eigen::VectorXd &wy) {
           Output out = mpc.Solve(state, coeffs);
 ~~~
 
+In `MPC Class`, I defineed the components of the cost function (state, actuators, etc) and the model constraints.   
+I also added weights for the tuning. 
 
 ~~~
 // Weights
