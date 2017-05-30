@@ -38,10 +38,7 @@ ws->send()
 
 ## The Model
 
-~~~
-Kinematic models are simplifications of dynamic models that ignore tire forces, gravity, and mass.
-~~~
-![vehicle_coord](https://github.com/HidetoKimura/carnd_mpc_project/blob/master/vehicle_coord.png)
+For this project we used a global kinematic model, which is simplifications of dynamic models that ignore tire forces, gravity, and mass. The model used consists of the following equations and the vehicle coordinate system.
 
 ~~~
       // x_[t+1] = x[t] + v[t] * cos(psi[t]) * dt
@@ -52,23 +49,37 @@ Kinematic models are simplifications of dynamic models that ignore tire forces, 
       // epsi[t+1] = psi[t] - psides[t] + v[t] * delta[t] / Lf * dt
 ~~~
 
+![vehicle_coord](https://github.com/HidetoKimura/carnd_mpc_project/blob/master/vehicle_coord.png)
+
 ### state
-x, y - Position  
-psi - Orientation  
-v - Speed  
+* `x, y` - Position  
+* `psi` - Orientation  
+* `v` - Speed  
 
 ### actuators
-delta - Steering angle  
-a - Acceleration (throttle/brake combined)  
+* `delta` - Steering angle  
+* `a` - Acceleration (throttle/brake combined)  
 
 ### error
-cte - Cross Track Error  
-epsi - Orientation Error  
+* `cte` - Cross Track Error  
+* `epsi` - Orientation Error  
 
 ### environment value
-Lf - Distance between the front of the vehicle and its center of gravity  
+* `Lf` - Distance between the front of the vehicle and its center of gravity  
 
+And the simulator pass the following parameters.
 
+### parameters from the simulator
+
+* `ptsx` (Array<float>) - The global x positions of the waypoints.
+* `ptsy` (Array<float>) - The global y positions of the waypoints. This corresponds to the z coordinate in Unity
+since y is the up-down direction.
+* `psi` (float) - The orientation of the vehicle in **radians** converted from the Unity format to the standard format expected in most mathemetical functions.
+* `x` (float) - The global x position of the vehicle.
+* `y` (float) - The global y position of the vehicle.
+* `steering_angle` (float) - The current steering angle in **radians**.
+* `throttle` (float) - The current throttle value [-1, 1].
+* `speed` (float) - The current velocity in **mph**.
 
 ## Timestep Length and Elapsed Duration (N & dt)
 
