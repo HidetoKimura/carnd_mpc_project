@@ -110,8 +110,8 @@ double dt = 0.05; // sec
 
 ## Polynomial Fitting and MPC Preprocessing
 
-As described above, the simulator pass the vehicle state and waypoints with the global coordinates.  
-First we need convert to the vehicle coordinates. 
+As described above, the simulator pass the vehicle state and waypoints with the global coordinate.  
+First we need convert to the vehicle coordinate. 
 
 ~~~
 void conv_vehicle_coordinate(vector<double> &ptsx, vector<double> &ptsy, double px, double py, double psi, 
@@ -130,6 +130,8 @@ Next, we proceed with the following step.　　
 1. Fit the polynomial to the waypoints. Get `coeffs`.
 2. Calculate cross track error and orientation error values.
 3. Call mpc.Solve and get `out`. `out` has `delta(steering)` and `a(throttle)`.
+
+Note: x, y, psi equal zero on the vehicle coordinate. (please see the above figure)
 
 ~~~
           conv_vehicle_coordinate(ptsx, ptsy, px, py, psi ,wx, wy);
@@ -189,6 +191,10 @@ const double w_a_diff = 1.0;
 
 
 ## Model Predictive Control with Latency
+
+As described above, 'N' is 12 step and 'dt' is 50ms.  
+So We need to use index:2 value for the 100ms latency.  
+
 ~~~
           const int latency_index = 2;
 
